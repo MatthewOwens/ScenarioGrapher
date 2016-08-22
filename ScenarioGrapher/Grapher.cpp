@@ -3,7 +3,7 @@
 #include <algorithm>
 Grapher::Grapher() : fileManager("dialogue/")
 {
-	window.create(sf::VideoMode(1280, 720), "DialogueGrapher");
+	window.create(sf::VideoMode(1280, 720), "Scenario Grapher");
 
 	// Loading the font
 	font.loadFromFile("assets/fonts/EaseOfUse.ttf");

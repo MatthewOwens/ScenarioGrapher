@@ -80,12 +80,18 @@
 					"requiredFlags" : 
 					[
 						{
-							"key" : "delinuqent",
+							"key" : "delinquent",
 							"value" : true
 						}
 					],
 					"targetID" : "test7",
-					"triggeredFlags" : []
+					"triggeredFlags" : 
+					[
+						{
+							"key" : "irritated_man",
+							"value" : true
+						}
+					]
 				}
 			],
 			"header" : "Old Man",
@@ -110,7 +116,7 @@
 			"id" : "test5"
 		},
 		{
-			"body" : "",
+			"body" : "Go fuck yourself, old man!",
 			"connectors" : 
 			[
 				{
@@ -121,13 +127,13 @@
 					"triggeredFlags" : []
 				}
 			],
-			"header" : "",
+			"header" : "You",
 			"id" : "test7"
 		},
 		{
-			"body" : "",
+			"body" : "Well fuck you too, you little shit!",
 			"connectors" : [],
-			"header" : "",
+			"header" : "Old Man",
 			"id" : "test8"
 		}
 	]

@@ -39,7 +39,6 @@ class Grapher
 		void onMiddleRelease(sf::Vector2f& viewPos);
 
 		void onRightClick(sf::Vector2f& viewPos);
-		void onRightRelease();
 
 		void onTextEntered(int unicode);
 		void onMouseScroll(float delta);

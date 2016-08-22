@@ -499,6 +499,14 @@ void Grapher::onLeftClick(sf::Vector2f& viewPos)
 {
 	if (connEdit == NULL && flagEdit == NULL)
 	{
+		if (selectedInputBox != NULL)
+		{
+			for (auto i : nodeViews)
+			{
+				if (i->getBodyBox() == selectedInputBox || i->getHeaderBox() == selectedInputBox)
+					selectedInputBox->setString(i->getUnsavedInput());
+			}
+		}
 		for (auto i : nodeViews)
 		{
 			selectedInputBox = i->getSelectedInputBox(viewPos);
@@ -541,7 +549,7 @@ void Grapher::onLeftClick(sf::Vector2f& viewPos)
 	{
 		if (flagEdit == NULL)
 		{
-			if (selectedInputBox = NULL)
+			if (selectedInputBox == NULL)
 				selectedNode = NULL;
 
 			if (connEdit)

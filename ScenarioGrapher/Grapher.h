@@ -18,7 +18,6 @@
 #include "InputManager.h"
 #include "ImageManager.h"
 #include "Button.h"
-#include "StateManager.h"
 class Grapher
 {
 	public:
@@ -51,7 +50,6 @@ class Grapher
 
 		InputManager inputManager;
 		ImageManager imageManager;
-		StateManager stateManage;
 
 		FileManager fileManager;
 		InputBox ibox;				// The InputBox used to get input for this class

@@ -582,7 +582,7 @@ void Grapher::onLeftClick(sf::Vector2f& viewPos)
 	}
 	clock.restart();
 
-	if (!selectedNode)
+	if (!clickedNode)
 	{
 		if (!graphBG.getGlobalBounds().contains(viewPos))
 			movingView = true;

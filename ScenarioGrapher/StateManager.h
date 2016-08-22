@@ -7,7 +7,7 @@
 class StateManager
 {
 public:
-	enum StateEnum {MENU, OPTIONS, LOADING, GAME, COMBAT, DIALOGUE};
+	enum StateEnum {GRAPHER, CONNEDIT, FLAGEDIT};
 
 	StateManager(InputManager* inputs, ImageManager* images, sf::RenderWindow* win);
 	~StateManager();

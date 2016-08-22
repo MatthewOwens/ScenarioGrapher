@@ -10,6 +10,7 @@
 #define BASESTATE_H
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Network/Packet.hpp>
+#include <SFML/Window/Event.hpp>
 #include "InputManager.h"
 #include "ImageManager.h"
 
@@ -19,6 +20,7 @@ class BaseState
 {
 public:
 	virtual ~BaseState();// = 0;
+	virtual void processEvents(const sf::Event& event) = 0;
 	virtual void update(InputManager* inputManager, StateManager* stateManager) = 0;
 	virtual void render(sf::RenderWindow* window) = 0;
 	virtual void onEnter(sf::Packet* data, ImageManager* imageManager) = 0;

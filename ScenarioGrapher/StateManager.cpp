@@ -1,4 +1,5 @@
 #include "StateManager.h"
+#include "GraphState.h"
 #include <iostream>
 
 StateManager::StateManager(InputManager* inputs, ImageManager* images, sf::RenderWindow* win)
@@ -7,12 +8,6 @@ StateManager::StateManager(InputManager* inputs, ImageManager* images, sf::Rende
 	inputManager = inputs;
 	imageManager = images;
 	window = win;
-
-
-	// Creating the game state right off the bat, since it's all we have
-	// implemented currently
-	//pushState(StateEnum::GAME);
-	pushState(StateEnum::MENU);
 }
 
 StateManager::StateManager()
@@ -38,11 +33,12 @@ void StateManager::pushState(StateEnum stateType, sf::Packet* data)
 	// Creating a new state on top of the stack
 	switch(stateType)
 	{
-		case GAME:
+		case GRAPHER:
+			stateStack.emplace(new GraphState());
 			break;
-		case MENU:
+		case CONNEDIT:
 			break;
-		case DIALOGUE:
+		case FLAGEDIT:
 			break;
 		default:
 			std::cout << "Cannot create state!" << std::endl;

@@ -43,6 +43,9 @@ class NodeView
 
 		inline std::vector<sf::Text>& getPrioTexts() { return connectorPriorities; }
 		inline std::vector<sf::Text>& getChoiceTexts() { return connectorTexts; }
+		inline InputBox* getHeaderBox() { return &headerInput; }
+		inline InputBox* getBodyBox() { return &bodyInput; }
+
 	private:
 		// Enum for accessing the text and rect arrays
 		enum {ID, HEADER, BODY};

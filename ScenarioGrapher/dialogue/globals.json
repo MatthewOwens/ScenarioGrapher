@@ -1,0 +1,13 @@
+{
+	"flags" : 
+	[
+		{
+			"key" : "delinquent",
+			"value" : false
+		},
+		{
+			"key" : "irritated_man",
+			"value" : false
+		}
+	]
+}

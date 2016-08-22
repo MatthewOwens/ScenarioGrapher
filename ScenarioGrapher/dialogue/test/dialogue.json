@@ -1,0 +1,134 @@
+{
+	"module" : "test",
+	"nodes" : 
+	[
+		{
+			"body" : "Oi!",
+			"connectors" : 
+			[
+				{
+					"choiceText" : "",
+					"priority" : 0,
+					"requiredFlags" : [],
+					"targetID" : "test1",
+					"triggeredFlags" : []
+				},
+				{
+					"choiceText" : "",
+					"priority" : -1,
+					"requiredFlags" : 
+					[
+						{
+							"key" : "irritated_man",
+							"value" : true
+						}
+					],
+					"targetID" : "test5",
+					"triggeredFlags" : 
+					[
+						{
+							"key" : "delinquent",
+							"value" : false
+						},
+						{
+							"key" : "irritated_man",
+							"value" : false
+						}
+					]
+				}
+			],
+			"header" : "Old Man",
+			"id" : "test0"
+		},
+		{
+			"body" : "Give me a hand, will you?",
+			"connectors" : 
+			[
+				{
+					"choiceText" : "Yes",
+					"priority" : 0,
+					"requiredFlags" : [],
+					"targetID" : "test2",
+					"triggeredFlags" : 
+					[
+						{
+							"key" : "delinquent",
+							"value" : false
+						},
+						{
+							"key" : "irritated_man",
+							"value" : false
+						}
+					]
+				},
+				{
+					"choiceText" : "No",
+					"priority" : 0,
+					"requiredFlags" : [],
+					"targetID" : "test3",
+					"triggeredFlags" : 
+					[
+						{
+							"key" : "delinquent",
+							"value" : true
+						}
+					]
+				},
+				{
+					"choiceText" : "",
+					"priority" : -1,
+					"requiredFlags" : 
+					[
+						{
+							"key" : "delinuqent",
+							"value" : true
+						}
+					],
+					"targetID" : "test7",
+					"triggeredFlags" : []
+				}
+			],
+			"header" : "Old Man",
+			"id" : "test1"
+		},
+		{
+			"body" : "Thanks a bunch!",
+			"connectors" : [],
+			"header" : "Old Man",
+			"id" : "test2"
+		},
+		{
+			"body" : "Kids these days!",
+			"connectors" : [],
+			"header" : "Old Man",
+			"id" : "test3"
+		},
+		{
+			"body" : "Fuck you",
+			"connectors" : [],
+			"header" : "Old Man",
+			"id" : "test5"
+		},
+		{
+			"body" : "",
+			"connectors" : 
+			[
+				{
+					"choiceText" : "",
+					"priority" : -1,
+					"requiredFlags" : [],
+					"targetID" : "test8",
+					"triggeredFlags" : []
+				}
+			],
+			"header" : "",
+			"id" : "test7"
+		},
+		{
+			"body" : "",
+			"connectors" : [],
+			"header" : "",
+			"id" : "test8"
+		}
+	]
+}

@@ -17,8 +17,8 @@ class Node
 
 		std::string* getChosenConnectorText();
 
-		bool resolveable(std::map<std::string, bool> localFlags,
-						 std::map<std::string, bool> globalFlags);
+		bool resolveable(std::map<std::string, int> localFlags,
+						 std::map<std::string, int> globalFlags);
 
 		const std::string& getIdentifier() { return identifier; }
 		const std::string& getHeader() { return header; }

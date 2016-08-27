@@ -18,6 +18,10 @@ In addition, the following features are planned to be implemented in the near fu
 
 Be sure to check out the [User Guide](https://github.com/WrenchGames/ScenarioGrapher/wiki/User-Guide) and [Json Structure](https://www.github.com/WrenchGames/ScenarioGrapher "To be written")
 
+TODO
+----
+* Fix flag incrementing & decrementing
+* Remove flags on middle click
 
 Build Dependencies
 ------------

@@ -9,7 +9,7 @@ globalFlagPath(dialogueFolderPath + "globals.json")
 }
 
 void FileManager::saveFlags(const std::string& filePath,
-							const std::map<std::string, bool>& flags)
+							const std::map<std::string, int>& flags)
 {
 	std::ofstream ofs(filePath);
 	Json::StyledWriter writer;
@@ -29,37 +29,37 @@ void FileManager::saveFlags(const std::string& filePath,
 	ofs << obj;
 }
 
-std::map<std::string, bool> FileManager::loadFlags(const std::string& filePath)
+std::map<std::string, int> FileManager::loadFlags(const std::string& filePath)
 {
 	std::ifstream ifs(filePath);
 	Json::Reader reader;
 	Json::Value obj;
 	reader.parse(ifs, obj);
-	std::map<std::string, bool> ret;
+	std::map<std::string, int> ret;
 
 	const Json::Value& flags = obj["flags"];
 	for (int i = 0; i < flags.size(); ++i)
-		ret[flags[i]["key"].asString()] = flags[i]["value"].asBool();
+		ret[flags[i]["key"].asString()] = flags[i]["value"].asInt();
 
 	return ret;
 }
 
-std::map<std::string, bool> FileManager::loadLocals(const std::string& moduleName)
+std::map<std::string, int> FileManager::loadLocals(const std::string& moduleName)
 {
 	return loadFlags(dialogueFolder + moduleName + "/flags.json");
 }
 
-std::map<std::string, bool> FileManager::loadGlobals()
+std::map<std::string, int> FileManager::loadGlobals()
 {
 	return loadFlags(dialogueFolder + "globals.json");
 }
 
-void FileManager::saveLocals(const std::string& moduleName, const std::map<std::string, bool>& map)
+void FileManager::saveLocals(const std::string& moduleName, const std::map<std::string, int>& map)
 {
 	saveFlags(dialogueFolder + moduleName + "/flags.json", map);
 }
 
-void FileManager::saveGlobals(const std::map<std::string, bool>& map)
+void FileManager::saveGlobals(const std::map<std::string, int>& map)
 {
 	saveFlags(dialogueFolder + "globals.json", map);
 }

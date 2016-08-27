@@ -17,24 +17,25 @@ class Connector
 		Connector(Node* startNode, Node* endNode, std::string choiceText,
 				  int priority = -1);
 		~Connector();
-		void addFlag(std::string flag, bool state);
-		void addTrigger(std::string flag, bool state);
+		void addFlag(std::string flag);
+		void addFlag(std::string flag, int val);
+		void addTrigger(std::string flag, int val);
 		inline Node* const getEnd() { return endNode; }
 		inline const std::string& getChoiceText() { return choiceText; }
 		inline void setChoiceText(std::string& str) { choiceText = str; }
 		inline int getPriority() { return priority; }
 		inline void setPriority(int prio) { priority = prio; }
-		inline std::map<std::string, bool>& getFlags() { return flags; }
-		inline std::map<std::string, bool>& getTriggers() { return triggeredFlags; }
+		inline std::map<std::string, int>& getFlags() { return flags; }
+		inline std::map<std::string, int>& getTriggers() { return triggeredFlags; }
 
 	protected:
-		bool conditionsMet(std::map<std::string, bool>& localFlags,
-						   std::map<std::string, bool>& globalFlags);
+		bool conditionsMet(std::map<std::string, int>& localFlags,
+						   std::map<std::string, int>& globalFlags);
 		Node* startNode;
 		Node* endNode;
 		std::string choiceText;
-		std::map<std::string, bool> flags;
-		std::map<std::string, bool> triggeredFlags;
+		std::map<std::string, int> flags;
+		std::map<std::string, int> triggeredFlags;
 		int priority;	// priority values <0 are auto resolved
 };
 #endif//CONNECTOR_H

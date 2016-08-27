@@ -21,8 +21,8 @@ void Node::setID(const std::string& id)
 }
 
 // Checks if we can resolve the node without player intervention
-bool Node::resolveable(std::map<std::string, bool> localFlags,
-			  		   std::map<std::string, bool> globalFlags)
+bool Node::resolveable(std::map<std::string, int> localFlags,
+			  		   std::map<std::string, int> globalFlags)
 {
 	// If this->is the end of the module, return true
 	if(connections.size() == 0)

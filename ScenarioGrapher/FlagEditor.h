@@ -11,24 +11,24 @@
 class FlagEditor
 {
 public:
-	FlagEditor(Connector& conn, std::map<std::string, bool>& localFlags,
-		std::map<std::string, bool>& globalFlags, sf::Vector2f availableSize,
+	FlagEditor(Connector& conn, std::map<std::string, int>& localFlags,
+		std::map<std::string, int>& globalFlags, sf::Vector2f availableSize,
 		const sf::Font& font, const sf::Texture& buttonTexture);
 
 	~FlagEditor();
 	void render(sf::RenderWindow& window);
 	bool checkButtons(InputManager* inputManager);
-	void toggleText(const sf::Vector2f& mousePos);
+	void incrementFlags(const sf::Vector2f& mousePos);
 	void inputString(std::string str);
-	void removeFlags(const sf::Vector2f& mousePos);
+	void decrementFlags(const sf::Vector2f& mousePos);
 	inline bool gettingText() { return (inStrings[0] == "" ? false : true); }
 private:
 	enum TextBlocks {LOCAL = 0, GLOBAL, REQUIRED, TRIGGERED};
 
 	Connector& conn;	// The connection who's flags we're going to be editing
 	const sf::Font& fnt;
-	std::map<std::string, bool> &localFlags;
-	std::map<std::string, bool> &globalFlags;
+	std::map<std::string, int> &localFlags;
+	std::map<std::string, int> &globalFlags;
 
 	std::vector<sf::Text> requiredTexts;
 	std::vector<sf::Text> triggeredTexts;
@@ -46,10 +46,10 @@ private:
 	void moveTextBlock(TextBlocks block, float moveVal);
 	void addText(std::vector<sf::Text>& vec);
 
-	void toggle(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
-				std::map<std::string, bool>& map);
+	void increment(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
+				std::map<std::string, int>& map, bool set = true);
 
-	void remove(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
-				std::map<std::string, bool>& map);
+	void decrement(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
+				std::map<std::string, int>& map, bool set = true);
 };
 #endif//FLAGEDITOR_H

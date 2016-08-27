@@ -587,7 +587,7 @@ void Grapher::onLeftClick(sf::Vector2f& viewPos)
 				ibox.setActive(true);
 				ibox.setSelected(true);
 			}
-			flagEdit->toggleText(inputManager.getMousePosition());
+			flagEdit->incrementFlags(inputManager.getMousePosition());
 		}
 	}
 	clock.restart();
@@ -660,7 +660,7 @@ void Grapher::onLeftClick(sf::Vector2f& viewPos)
 void Grapher::onRightClick(sf::Vector2f& viewPos)
 {
 	if (flagEdit != NULL)
-		flagEdit->removeFlags(inputManager.getMousePosition());
+		flagEdit->decrementFlags(inputManager.getMousePosition());
 	else
 	{
 		for (auto i = nodeViews.begin(); i != nodeViews.end();)

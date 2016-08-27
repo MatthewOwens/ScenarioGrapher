@@ -61,8 +61,8 @@ class Grapher
 		std::list<NodeView*> nodeViews;		// Representations of the nodes in this module
 		sf::RenderWindow window;
 		sf::Event event;
-		int nodeCount;;
-		float scaleFactor;
+		int nodeCount;
+		//float scaleFactor;
 		float scale;
 		bool movingView;
 		bool showNodeNames;

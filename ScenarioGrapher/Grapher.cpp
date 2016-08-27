@@ -9,7 +9,6 @@ Grapher::Grapher() : fileManager("dialogue/")
 	font.loadFromFile("assets/fonts/EaseOfUse.ttf");
 
 	nodeCount = 0;
-	scaleFactor = 1.f;
 	scale = 1.f;
 	selectedNode = NULL;
 	selectedInputBox = NULL;
@@ -215,7 +214,14 @@ void Grapher::update()
 	}
 	else if(movingView)
 	{
-		graphView.move(inputManager.getPrevMousePosition() - inputManager.getMousePosition());
+		float moveScale = scale - 1.f;
+
+		if (moveScale == 0)
+			moveScale = 1.f;
+		else if (moveScale < 0)
+			moveScale *= -1;
+
+		graphView.move((inputManager.getPrevMousePosition() - inputManager.getMousePosition()) * moveScale);
 	}
 
 	for(auto i : buttons)
@@ -427,21 +433,17 @@ void Grapher::onTextEntered(int unicode)
 }
 void Grapher::onMouseScroll(float delta)
 {
-	// TODO: CHECK 
+	float scaleFactor = 1.0f;
 	if (delta < 0)
 	{
 		scaleFactor = 0.90f;
-		scale *= scaleFactor;
 	}
 	else if (delta > 0)
 	{
 		scaleFactor = 1.10f;
-		scale *= scaleFactor;
 	}
-	else
-	{
-		scaleFactor = 1.f;
-	}
+
+	scale *= scaleFactor;
 
 	graphView.zoom(scaleFactor);
 }

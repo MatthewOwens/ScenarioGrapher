@@ -21,6 +21,7 @@ public:
 	void incrementFlags(const sf::Vector2f& mousePos);
 	void inputString(std::string str);
 	void decrementFlags(const sf::Vector2f& mousePos);
+	void removeFlags(const sf::Vector2f& mousePos);
 	inline bool gettingText() { return (inStrings[0] == "" ? false : true); }
 private:
 	enum TextBlocks {LOCAL = 0, GLOBAL, REQUIRED, TRIGGERED};
@@ -51,5 +52,8 @@ private:
 
 	void decrement(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
 				std::map<std::string, int>& map, bool set = true);
+
+	void remove(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
+				std::map<std::string, int>& map);
 };
 #endif//FLAGEDITOR_H

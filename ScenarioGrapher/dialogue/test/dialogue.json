@@ -3,138 +3,31 @@
 	"nodes" : 
 	[
 		{
-			"body" : "Oi!",
+			"body" : "",
 			"connectors" : 
 			[
 				{
 					"choiceText" : "",
-					"priority" : 0,
+					"priority" : -1,
 					"requiredFlags" : [],
 					"targetID" : "test1",
-					"triggeredFlags" : []
-				},
-				{
-					"choiceText" : "",
-					"priority" : -1,
-					"requiredFlags" : 
-					[
-						{
-							"key" : "irritated_man",
-							"value" : true
-						}
-					],
-					"targetID" : "test5",
 					"triggeredFlags" : 
 					[
 						{
-							"key" : "delinquent",
-							"value" : false
-						},
-						{
-							"key" : "irritated_man",
-							"value" : false
+							"key" : "vanity",
+							"value" : 2
 						}
 					]
 				}
 			],
-			"header" : "Old Man",
+			"header" : "",
 			"id" : "test0"
 		},
 		{
-			"body" : "Give me a hand, will you?",
-			"connectors" : 
-			[
-				{
-					"choiceText" : "Yes",
-					"priority" : 0,
-					"requiredFlags" : [],
-					"targetID" : "test2",
-					"triggeredFlags" : 
-					[
-						{
-							"key" : "delinquent",
-							"value" : false
-						},
-						{
-							"key" : "irritated_man",
-							"value" : false
-						}
-					]
-				},
-				{
-					"choiceText" : "No",
-					"priority" : 0,
-					"requiredFlags" : [],
-					"targetID" : "test3",
-					"triggeredFlags" : 
-					[
-						{
-							"key" : "delinquent",
-							"value" : true
-						}
-					]
-				},
-				{
-					"choiceText" : "",
-					"priority" : -1,
-					"requiredFlags" : 
-					[
-						{
-							"key" : "delinquent",
-							"value" : true
-						}
-					],
-					"targetID" : "test7",
-					"triggeredFlags" : 
-					[
-						{
-							"key" : "irritated_man",
-							"value" : true
-						}
-					]
-				}
-			],
-			"header" : "Old Man",
+			"body" : "",
+			"connectors" : [],
+			"header" : "",
 			"id" : "test1"
-		},
-		{
-			"body" : "Thanks a bunch!",
-			"connectors" : [],
-			"header" : "Old Man",
-			"id" : "test2"
-		},
-		{
-			"body" : "Kids these days!",
-			"connectors" : [],
-			"header" : "Old Man",
-			"id" : "test3"
-		},
-		{
-			"body" : "Fuck you",
-			"connectors" : [],
-			"header" : "Old Man",
-			"id" : "test5"
-		},
-		{
-			"body" : "Go fuck yourself, old man!",
-			"connectors" : 
-			[
-				{
-					"choiceText" : "",
-					"priority" : -1,
-					"requiredFlags" : [],
-					"targetID" : "test8",
-					"triggeredFlags" : []
-				}
-			],
-			"header" : "You",
-			"id" : "test7"
-		},
-		{
-			"body" : "Well fuck you too, you little shit!",
-			"connectors" : [],
-			"header" : "Old Man",
-			"id" : "test8"
 		}
 	]
 }

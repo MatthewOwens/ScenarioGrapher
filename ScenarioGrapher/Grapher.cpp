@@ -379,6 +379,9 @@ void Grapher::onTextEntered(int unicode)
 						case LOAD:
 						{
 							 std::string newName;
+							 lFlags.clear();
+							 gFlags.clear();
+
 							 if (populateGraph(fileManager.loadDialogue(ibox.getString(), newName)) == 0)
 							 {
 								 moduleName.setString(newName);
@@ -700,18 +703,24 @@ void Grapher::onRightClick(sf::Vector2f& viewPos)
 
 void Grapher::onMiddleClick(sf::Vector2f& viewPos)
 {
-	connectingNodes[0] = NULL;
-
-	for (auto i : nodeViews)
+	if (connEdit == NULL && flagEdit == NULL)
 	{
-		if (i->getGlobalBounds().contains(viewPos))
+		connectingNodes[0] = NULL;
+		for (auto i : nodeViews)
 		{
-			std::cout << "Node Connection started" << std::endl;
-			connectingNodes[0] = i;
-			break;
+			if (i->getGlobalBounds().contains(viewPos))
+			{
+				std::cout << "Node Connection started" << std::endl;
+				connectingNodes[0] = i;
+				break;
+			}
 		}
-	}
 
-	if (connectingNodes[0] == NULL)
-		std::cout << "No nodeview found!" << std::endl;
+		if (connectingNodes[0] == NULL)
+			std::cout << "No nodeview found!" << std::endl;
+	}
+	else if (flagEdit != NULL)
+	{
+		flagEdit->removeFlags(inputManager.getMousePosition());
+	}
 }

@@ -36,12 +36,8 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 
 		textHeight = localTexts.back().getGlobalBounds().height;
 		textLength = localTexts.back().getGlobalBounds().width;
-		
-		if (i.second)
-			localTexts.push_back(sf::Text("true", font, charSize));
-		else
-			localTexts.push_back(sf::Text("false", font, charSize));
 
+		localTexts.push_back(sf::Text(std::to_string(i.second), font, charSize));
 		localTexts.back().setPosition(textSpawn + padding);
 		localTexts.back().move(textLength, 0);
 
@@ -61,11 +57,7 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 		globalTexts.back().setPosition(textSpawn);
 
 		textLength = globalTexts.back().getGlobalBounds().width;
-		
-		if (i.second)
-			globalTexts.push_back(sf::Text("true", font, charSize));
-		else
-			globalTexts.push_back(sf::Text("false", font, charSize));
+		globalTexts.push_back(sf::Text(std::to_string(i.second), font, charSize));
 
 		globalTexts.back().setPosition(textSpawn + padding);
 		globalTexts.back().move(textLength, 0);
@@ -85,11 +77,7 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 		requiredTexts.back().setPosition(textSpawn);
 
 		textLength = requiredTexts.back().getGlobalBounds().width;
-		
-		if (i.second)
-			requiredTexts.push_back(sf::Text("true", font, charSize));
-		else
-			requiredTexts.push_back(sf::Text("false", font, charSize));
+		requiredTexts.push_back(sf::Text(std::to_string(i.second), font, charSize));
 
 		requiredTexts.back().setPosition(textSpawn + padding);
 		requiredTexts.back().move(textLength, 0);
@@ -108,11 +96,7 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 		triggeredTexts.back().setPosition(textSpawn);
 
 		textLength = triggeredTexts.back().getGlobalBounds().width;
-		
-		if (i.second)
-			triggeredTexts.push_back(sf::Text("true", font, charSize));
-		else
-			triggeredTexts.push_back(sf::Text("false", font, charSize));
+		triggeredTexts.push_back(sf::Text(std::to_string(i.second), font, charSize));
 
 		triggeredTexts.back().setPosition(textSpawn + padding);
 		triggeredTexts.back().move(textLength, 0);
@@ -179,8 +163,16 @@ void FlagEditor::decrementFlags(const sf::Vector2f& mousePos)
 {
 	decrement(mousePos, requiredTexts, conn.getFlags());
 	decrement(mousePos, triggeredTexts, conn.getTriggers(), false);
-	decrement(mousePos, globalTexts, globalFlags);
-	decrement(mousePos, localTexts, localFlags);
+	//decrement(mousePos, globalTexts, globalFlags);
+	//decrement(mousePos, localTexts, localFlags);
+}
+
+void FlagEditor::removeFlags(const sf::Vector2f& mousePos)
+{
+	remove(mousePos, requiredTexts, conn.getFlags());
+	remove(mousePos, triggeredTexts, conn.getTriggers());
+	remove(mousePos, globalTexts, globalFlags);
+	remove(mousePos, localTexts, localFlags);
 }
 
 void FlagEditor::decrement(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
@@ -210,8 +202,8 @@ void FlagEditor::decrement(const sf::Vector2f& mousePos, std::vector<sf::Text>& 
 		// Decrementing the flag
 		mapItr->second--;
 
-		if (vecItr % 2 == 1)
-			vecItr--;
+		if (vecItr % 2 == 0)
+			vecItr++;
 
 		// Updating the string
 		if(set)
@@ -221,10 +213,39 @@ void FlagEditor::decrement(const sf::Vector2f& mousePos, std::vector<sf::Text>& 
 			std::string sign = "";
 			if (mapItr->second > 0)
 				sign = "+";
-			else sign = "-";
 
 			vec[vecItr].setString(sign + std::to_string(mapItr->second));
 		}
+	}
+}
+
+void FlagEditor::remove(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
+						std::map<std::string, int>& map)
+{
+	int vecSel = -1;
+	auto mapItr = map.begin();
+
+	for (int i = 0; i < vec.size(); ++i)
+	{
+		if (vec[i].getGlobalBounds().contains(mousePos))
+		{
+			vecSel = i;
+
+			if (i % 2 == 1)	// Clicked on the value of the flag
+				vecSel--;
+
+		}
+
+		if (i % 2 == 0 && i != 0)
+			mapItr++;
+
+	}
+
+	// If there was a match
+	if (vecSel != -1)
+	{
+		map.erase(mapItr);
+		vec.erase(vec.begin() + vecSel, vec.begin() + vecSel + 2);
 	}
 }
 
@@ -240,7 +261,7 @@ void FlagEditor::increment(const sf::Vector2f& mousePos, std::vector<sf::Text>& 
 		{
 			vecSel = i;
 
-			if (i % 2 == 0)	// Clicked on the value of the flag
+			if (i % 2 == 0)	// Clicked on the name of the flag
 				vecSel = i + 1;
 
 			break;
@@ -261,7 +282,6 @@ void FlagEditor::increment(const sf::Vector2f& mousePos, std::vector<sf::Text>& 
 			std::string sign = "";
 			if (mapItr->second > 0)
 				sign = "+";
-			else sign = "-";
 
 			vec[vecSel].setString(sign + std::to_string(mapItr->second));
 		}

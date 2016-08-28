@@ -51,7 +51,8 @@ std::map<std::string, int> FileManager::loadLocals(const std::string& moduleName
 
 std::map<std::string, int> FileManager::loadGlobals()
 {
-	return loadFlags(dialogueFolder + "globals.json");
+	//return loadFlags(dialogueFolder + "globals.json");
+	return loadFlags(globalFlagPath);
 }
 
 void FileManager::saveLocals(const std::string& moduleName, const std::map<std::string, int>& map)
@@ -61,7 +62,8 @@ void FileManager::saveLocals(const std::string& moduleName, const std::map<std::
 
 void FileManager::saveGlobals(const std::map<std::string, int>& map)
 {
-	saveFlags(dialogueFolder + "globals.json", map);
+	//saveFlags(dialogueFolder + "globals.json", map);
+	saveFlags(globalFlagPath, map);
 }
 
 std::vector<Node*> FileManager::loadDialogue(const std::string& moduleFile)
@@ -133,10 +135,10 @@ std::vector<Node*> FileManager::loadDialogue(const std::string& moduleFile, std:
 
 				// Populating the flags if need be
 				for (int k = 0; k < requiredFlags.size(); ++k)
-					connection.addFlag(requiredFlags[k]["key"].asString(), requiredFlags[k]["value"].asBool());
+					connection.addFlag(requiredFlags[k]["key"].asString(), requiredFlags[k]["value"].asInt());
 
 				for (int k = 0; k < triggeredFlags.size(); ++k)
-					connection.addTrigger(triggeredFlags[k]["key"].asString(), triggeredFlags[k]["value"].asBool());
+					connection.addTrigger(triggeredFlags[k]["key"].asString(), triggeredFlags[k]["value"].asInt());
 
 				finalNodes[i]->addConnector(connection);
 			}

@@ -1,5 +1,7 @@
 #include "NodeView.h"
 #include <iostream>
+#include "Connector.h"
+#include <cmath>
 
 // Determines the node ID using the current module ID and the number of
 // nodes in the module

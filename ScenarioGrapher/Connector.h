@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "Node.h"
 class Connector
 {
 	friend class Node;

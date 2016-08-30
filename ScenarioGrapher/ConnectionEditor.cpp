@@ -64,7 +64,8 @@ void ConnectionEditor::confirmEdits()
 	{
 		if (selectedIndex % 2 == 0)	// string text box
 		{
-			conns[selectedIndex / 2].setChoiceText(iboxes[selectedIndex].getString());
+			std::string str = iboxes[selectedIndex].getString();
+			conns[selectedIndex / 2].setChoiceText(str);
 			choiceTexts[selectedIndex / 2].setString(iboxes[selectedIndex].getString());
 		}
 		else	// priority text box

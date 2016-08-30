@@ -526,7 +526,7 @@ void Grapher::onLeftClick(sf::Vector2f& viewPos)
 
 	// If we've clicked in the graph
 	//if (graphBG.getGlobalBounds().contains(inputManager.getMousePosition()))
-	sf::FloatRect& bnds = graphBG.getGlobalBounds();
+	const sf::FloatRect& bnds = graphBG.getGlobalBounds();
 	sf::Vector2f mspos = inputManager.getMousePosition();
 	if (bnds.contains(mspos))
 	{

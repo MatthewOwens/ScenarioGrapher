@@ -43,7 +43,7 @@ void InputBox::removeCharacter()
 
 bool InputBox::checkClicked(const sf::Vector2f& mousePos)
 {
-	sf::FloatRect& bounds = getGlobalBounds();
+	const sf::FloatRect& bounds = getGlobalBounds();
 	selected = bounds.contains(mousePos);
 	//selected = getGlobalBounds().contains(mousePos);
 

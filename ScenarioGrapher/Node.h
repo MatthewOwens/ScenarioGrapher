@@ -3,7 +3,10 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Connector.h"
+//#include "Connector.h"
+
+class Connector;
+
 class Node
 {
 	public:

@@ -1,6 +1,8 @@
 #include "Node.h"
 #include <iostream>
 
+#include "Connector.h"
+
 Node::Node(std::string identifier)
 {
 	this->identifier = identifier;

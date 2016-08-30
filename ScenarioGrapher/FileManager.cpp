@@ -1,6 +1,7 @@
 #include "FileManager.h"
 #include <iostream>
 #include <fstream>
+#include "Connector.h"
 
 FileManager::FileManager(const std::string& dialogueFolderPath)
 :dialogueFolder(dialogueFolderPath),

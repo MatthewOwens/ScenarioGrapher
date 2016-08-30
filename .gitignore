@@ -44,3 +44,6 @@ x64/
 
 # PS files
 *.psd
+
+# Swap files
+*.sw*

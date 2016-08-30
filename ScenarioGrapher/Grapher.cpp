@@ -380,7 +380,7 @@ void Grapher::onTextEntered(int unicode)
 						{
 							 std::string newName;
 							 lFlags.clear();
-							 gFlags.clear();
+							 //gFlags.clear();
 
 							 if (populateGraph(fileManager.loadDialogue(ibox.getString(), newName)) == 0)
 							 {
@@ -579,7 +579,25 @@ void Grapher::onLeftClick(sf::Vector2f& viewPos)
 			if (clock.getElapsedTime().asMilliseconds() < 250 && selectedNode != NULL)
 			{
 				if (selectedNode != NULL)
+				{
 					connEdit = new ConnectionEditor(selectedNode, connSpawn, font, imageManager.getTexture("flag"));
+					if(selectedInputBox)
+					{
+						NodeView* n = NULL;
+
+						for(auto view : nodeViews)
+						{
+							if(selectedInputBox == view->getHeaderBox() ||
+							   selectedInputBox == view->getBodyBox())
+							{
+								selectedInputBox->setString(view->getUnsavedInput());
+								break;
+							}
+						}
+						selectedInputBox->setSelected(false);
+						selectedInputBox = NULL;
+					}
+				}
 			}
 		}
 		else

@@ -48,14 +48,16 @@ Grapher::Grapher() : fileManager("dialogue/")
 	graphView.reset(sf::FloatRect(0,0,window.getSize().x, window.getSize().y));
 
 	// Initilising the buttons
-	buttons["m.name"] = new Button(sf::Vector2f(90,20), colors["button"],2);
+	buttons["m.name"] = new Button(sf::Vector2f(80,20), colors["button"],2);
 	buttons["m.name"]->setPosition(sf::Vector2f(window.getSize().x - 100, 100));
 
 	buttons["n.node"] = new Button(sf::Vector2f(80,20), colors["button"],2);
 	buttons["n.node"]->setPosition(sf::Vector2f(window.getSize().x - 290, 100));
 
-	buttons["n.names"] = new Button(sf::Vector2f(95, 20), colors["button"],2);
-	buttons["n.names"]->setPosition(sf::Vector2f(window.getSize().x - 200, 100));
+	//buttons["n.names"] = new Button(sf::Vector2f(80, 20), colors["button"],2);
+	//buttons["n.names"]->setPosition(sf::Vector2f(window.getSize().x - 200, 100));
+	buttons["n.ndoe"] = new Button(sf::Vector2f(80, 20), colors["button"],2);
+	buttons["n.ndoe"]->setPosition(sf::Vector2f(window.getSize().x - 200, 100));
 
 	buttons["exit"] = new Button(sf::Vector2f(80, 20), colors["button"],2);
 	buttons["exit"]->setPosition(sf::Vector2f(window.getSize().x - 100, 50));

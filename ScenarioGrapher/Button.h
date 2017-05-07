@@ -29,7 +29,7 @@ public:
 	void setIconTexture(const sf::Texture& texture, bool resetRect = false);
 	void setPosition(const sf::Vector2f &position);
 	void setScale(const sf::Vector2f &factors);
-	void setText(const sf::String &string, const sf::Font &font, unsigned int characterSize=20);
+	void setText(const std::string &string, const sf::Font &font, unsigned int characterSize=20);
 	void setColor(const sf::Color& color);
 	void setHighlight(const sf::Color& color);
 	void clearHighlight();

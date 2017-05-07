@@ -167,10 +167,12 @@ void Button::scale(const sf::Vector2f& factor)
 		rectShape->scale(factor);
 }
 
-void Button::setText(const sf::String &string, const sf::Font &font, unsigned int characterSize)
+void Button::setText(const std::string &string, const sf::Font &font, unsigned int characterSize)
 {
 	if(!text)
+	{
 		text = new sf::Text(string, font, characterSize);
+	}
 	else	// No need to call new again if text already exists
 	{
 		text->setString(string);
@@ -213,7 +215,8 @@ void Button::updatePositions()
 	if(text)
 	{
 		sf::FloatRect textBounds = text->getLocalBounds();
-		text->setPosition(pos.x + (buttonBounds.width / 2) - (textBounds.width / 2) - outlineOffset,
-						  pos.y + (buttonBounds.height / 2) - textBounds.height - outlineOffset);
+		text->setOrigin(textBounds.left + textBounds.width / 2.0f,
+						textBounds.top + textBounds.height / 2.0f);
+		text->setPosition(pos.x + buttonBounds.width / 2, pos.y + buttonBounds.height / 2);
 	}
 }

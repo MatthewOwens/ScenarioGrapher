@@ -6,7 +6,7 @@ Grapher::Grapher() : fileManager("dialogue/")
 	window.create(sf::VideoMode(1280, 720), "Scenario Grapher");
 
 	// Loading the font
-	font.loadFromFile("assets/fonts/EaseOfUse.ttf");
+	font.loadFromFile("assets/fonts/Inconsolata.otf");
 
 	nodeCount = 0;
 	scale = 1.f;

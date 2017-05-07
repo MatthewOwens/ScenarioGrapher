@@ -27,6 +27,7 @@
 *.exe
 *.out
 *.app
+DialogueGrapher
 
 # Visual Studio Files
 *.opendb
@@ -47,3 +48,6 @@ x64/
 
 # Swap files
 *.sw*
+
+# Experemental Dialogue Files
+dialog/*

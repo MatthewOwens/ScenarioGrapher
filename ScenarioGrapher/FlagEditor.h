@@ -2,6 +2,7 @@
 #define FLAGEDITOR_H
 #include "InputBox.h"
 #include "Connector.h"
+#include "ScrollableRegion.h"
 #include <map>
 #include <string>
 #include <SFML/Graphics/Text.hpp>
@@ -23,6 +24,7 @@ public:
 	void decrementFlags(const sf::Vector2f& mousePos);
 	void removeFlags(const sf::Vector2f& mousePos);
 	inline bool gettingText() { return (inStrings[0] == "" ? false : true); }
+	void checkScroll(float delta);
 private:
 	enum TextBlocks {LOCAL = 0, GLOBAL, REQUIRED, TRIGGERED};
 
@@ -35,6 +37,8 @@ private:
 	std::vector<sf::Text> triggeredTexts;
 	std::vector<sf::Text> localTexts;
 	std::vector<sf::Text> globalTexts;
+
+	ScrollableRegion scrollbox;
 
 	sf::Text breakTexts[4];
 	Button* buttons[4];

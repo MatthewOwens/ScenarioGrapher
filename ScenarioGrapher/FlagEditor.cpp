@@ -1,4 +1,5 @@
 #include "FlagEditor.h"
+#include <iostream>
 #include <locale>
 
 FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
@@ -9,12 +10,14 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 	globalFlags(global),
 	rect(sf::RectangleShape(availableSize)),
 	fnt(font)
+	//scrollbox(30,30,920,660,NULL)
 {
 	sf::Vector2f textSpawn = sf::Vector2f(50, 50);
 	sf::Vector2f padding = sf::Vector2f(20, 0);
 
 	rect.setPosition(0, 0);
 	rect.setFillColor(sf::Color(29,29,29));
+	//rect.setFillColor(sf::Color::Blue);
 	float textHeight = 0.f;
 	float textLength = 0.f;
 	clickedButton = -1;
@@ -23,6 +26,9 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 	breakTexts[GLOBAL] = sf::Text("Initial Global Flags:", font, charSize);
 	breakTexts[REQUIRED] = sf::Text("Required Flags:", font, charSize);
 	breakTexts[TRIGGERED] = sf::Text("Triggered Flags:", font, charSize);
+
+	scrollbox = ScrollableRegion(30,30,920,660,NULL);
+	scrollbox.setAnchor(&breakTexts[TRIGGERED]);
 
 	inStrings[0] = "";
 	inStrings[1] = "";
@@ -40,6 +46,7 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 		localTexts.push_back(sf::Text(std::to_string(i.second), font, charSize));
 		localTexts.back().setPosition(textSpawn + padding);
 		localTexts.back().move(textLength, 0);
+
 
 		// Moving the spawn
 		textSpawn.y += padding.x + textHeight;
@@ -102,7 +109,13 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 		triggeredTexts.back().move(textLength, 0);
 
 		textSpawn.y += padding.x + textHeight;
+
+		// Updating the scrollbox anchor
+		scrollbox.setAnchor(&triggeredTexts.back());
 	}
+
+	for(int i = 0; i < 4; ++i)
+		scrollbox.addElement(&breakTexts[i]);
 
 	for (int i = 0; i < 4; ++i)
 	{
@@ -340,6 +353,7 @@ void FlagEditor::inputString(std::string str)
 		break;
 	case TRIGGERED:
 		addText(triggeredTexts);
+		scrollbox.setAnchor(&triggeredTexts.back());
 		conn.addTrigger(inStrings[0], flagVal);
 		break;
 	case GLOBAL:
@@ -390,11 +404,15 @@ void FlagEditor::addText(std::vector<sf::Text>& vec)
 		vec.back().setPosition(ref.getPosition());
 		vec.back().move(10 + widthPadding + keyTextSize.x, ref.getGlobalBounds().height + 20);
 	}
+
+	// Adding the text to our scrollbox
+	scrollbox.addElement(&vec.back());
 }
 
 void FlagEditor::render(sf::RenderWindow& window)
 {
 	window.draw(rect);
+	window.draw(scrollbox.getVisBounds());
 
 	for (auto i : localTexts)
 		window.draw(i);
@@ -414,6 +432,8 @@ void FlagEditor::render(sf::RenderWindow& window)
 	for (auto i : buttons)
 		i->draw(&window);
 }
+
+void FlagEditor::checkScroll(float delta) { scrollbox.scroll(delta); }
 
 FlagEditor::~FlagEditor()
 {

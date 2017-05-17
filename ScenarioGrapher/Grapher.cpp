@@ -182,7 +182,11 @@ void Grapher::update()
 				break;
 
 			case sf::Event::MouseWheelScrolled:
-				onMouseScroll(event.mouseWheelScroll.delta);
+				if(flagEdit != NULL)
+					flagEdit->checkScroll(event.mouseWheelScroll.delta);
+				else
+					onMouseScroll(event.mouseWheelScroll.delta);
+
 				break;
 			
 			case sf::Event::MouseButtonReleased:
@@ -269,12 +273,16 @@ int Grapher::populateGraph(const std::vector<Node*>& nodes)
 	{
 		nodeViews.push_back(new NodeView(spawnPos, font, i));
 	}
+	
+	std::cout << "\tpopulated nodeviews" << std::endl;
 
 	for (auto i : nodeViews)
 	{
 		i->populateLines(nodeViews);
 		i->update();
 	}
+
+	std::cout << "\tpopulatedLines" << std::endl;
 
 	// Positioning the nodeViews correctly
 	openSet.push_back(nodeViews.front());
@@ -305,6 +313,7 @@ int Grapher::populateGraph(const std::vector<Node*>& nodes)
 
 			connCount++;
 		}
+		closedSet.push_back(openSet.front());
 		openSet.pop_front();
 	}
 

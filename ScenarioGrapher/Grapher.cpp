@@ -191,10 +191,10 @@ void Grapher::update()
 			
 			case sf::Event::MouseButtonReleased:
 			{
-			   if (event.mouseButton.button == sf::Mouse::Left)
-				   onLeftRelease();
-			   else if (event.mouseButton.button == sf::Mouse::Middle)
-				   onMiddleRelease(viewPos);
+				if (event.mouseButton.button == sf::Mouse::Left)
+					onLeftRelease();
+				else if (event.mouseButton.button == sf::Mouse::Middle)
+					onMiddleRelease(viewPos);
 				break;
 			}
 

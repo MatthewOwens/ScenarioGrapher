@@ -27,7 +27,7 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 	breakTexts[REQUIRED] = sf::Text("Required Flags:", font, charSize);
 	breakTexts[TRIGGERED] = sf::Text("Triggered Flags:", font, charSize);
 
-	scrollbox = ScrollableRegion(30,30,920,660,NULL);
+	scrollbox = ScrollableRegion(30,30,920,160,NULL);
 	scrollbox.setAnchor(&breakTexts[TRIGGERED]);
 
 	inStrings[0] = "";
@@ -407,6 +407,7 @@ void FlagEditor::addText(std::vector<sf::Text>& vec)
 
 	// Adding the text to our scrollbox
 	scrollbox.addElement(&vec.back());
+	scrollbox.addElement(&vec.back() - 1);
 }
 
 void FlagEditor::render(sf::RenderWindow& window)

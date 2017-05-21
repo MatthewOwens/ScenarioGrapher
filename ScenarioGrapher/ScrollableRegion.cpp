@@ -2,7 +2,7 @@
 #include <iostream>
 #include "termcolor.hpp"
 
-ScrollableRegion::ScrollableRegion(float left, float top, float width, float height, sf::Text* anchor)
+ScrollableRegion::ScrollableRegion(float left, float top, float width, float height, sf::Transformable* anchor)
 {
 	visBounds.setPosition(left, top);
 	visBounds.setSize(sf::Vector2f(width, height));
@@ -19,24 +19,18 @@ ScrollableRegion::ScrollableRegion()
 	anchor = NULL;
 }
 
-void ScrollableRegion::addElement(sf::Text *x)
+void ScrollableRegion::addElement(sf::Transformable *x)
 {
 	elements.push_back(x);
 
 	if(anchor == NULL)
-	{
-		std::cerr << termcolor::red << "error: no anchor found!\n" <<
-		"\tanchor set to '" << x->getString().toAnsiString() << "'" <<
-		termcolor::reset << std::endl;
-
 		anchor = x;
-	}
 
 	//if(scrollCheck(anchor))
 	//	visBounds.setFillColor(sf::Color::Red);
 
 }
-void ScrollableRegion::setAnchor(sf::Text* anchor)
+void ScrollableRegion::setAnchor(sf::Transformable* anchor)
 {
 	this->anchor = anchor;
 
@@ -44,13 +38,15 @@ void ScrollableRegion::setAnchor(sf::Text* anchor)
 	//	visBounds.setFillColor(sf::Color::Blue);
 }
 
-bool ScrollableRegion::scrollCheck(sf::Text *anchor)
+bool ScrollableRegion::scrollCheck(sf::Transformable *anchor)
 {
-	if(anchor == NULL)
+	sf::Text* text = dynamic_cast<sf::Text*>(anchor);
+
+	if(anchor == NULL || text == NULL)
 		return false;
 
 	// If we need to start scrolling
-	const sf::FloatRect& anchorBounds = anchor->getGlobalBounds();
+	const sf::FloatRect& anchorBounds = text->getGlobalBounds();
 	const sf::FloatRect& rangeBounds  = visBounds.getGlobalBounds();
 
 	if(anchorBounds.top + anchorBounds.height > rangeBounds.top + rangeBounds.height)

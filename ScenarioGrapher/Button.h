@@ -22,6 +22,7 @@ public:
 	inline bool isPressed() { return pressed; }
 	inline bool isHeld() { return held; }
 	inline bool isMouseOver() { return mouseOver; }
+	sf::Transformable* getTransformable();
 
 	void update(InputManager* inputManager);
 

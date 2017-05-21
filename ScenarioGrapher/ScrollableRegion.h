@@ -1,5 +1,5 @@
 /// Class to define a scrollable region, currently only supports scrolling
-/// through sf::Text items.
+/// through sf::Transformable items.
 ///
 /// ScrollableRegion is merely a way to view the elements within. The region itself does
 /// own anything in the 'elements' vector.
@@ -15,21 +15,21 @@ class ScrollableRegion
 {
 	public:
 		ScrollableRegion();
-		ScrollableRegion(float left, float top, float width, float height, sf::Text* anchor);
+		ScrollableRegion(float left, float top, float width, float height, sf::Transformable* anchor);
 		~ScrollableRegion();
 		sf::RectangleShape& getVisBounds() { return visBounds; }
-		void addElement(sf::Text *x);
-		void setAnchor(sf::Text* anchor);
+		void addElement(sf::Transformable *x);
+		void setAnchor(sf::Transformable* anchor);
 
-		void resizeBounds(sf::Text *x = NULL);
+		void resizeBounds(sf::Transformable *x = NULL);
 		void scroll(float sfDelta, float val = 3.0f);
 
 	private:
 		sf::RectangleShape visBounds;
 
-		std::vector<sf::Text*> elements;
-		sf::Text* anchor;				// Anchor who's position we'll be checking against
+		std::vector<sf::Transformable*> elements;
+		sf::Transformable* anchor;				// Anchor who's position we'll be checking against
 
-		bool scrollCheck(sf::Text *anchor);
+		bool scrollCheck(sf::Transformable *anchor);
 };
 #endif//SCROLLABLEREGION_H

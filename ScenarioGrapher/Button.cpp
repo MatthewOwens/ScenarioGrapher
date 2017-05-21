@@ -220,3 +220,12 @@ void Button::updatePositions()
 		text->setPosition(pos.x + buttonBounds.width / 2, pos.y + buttonBounds.height / 2);
 	}
 }
+
+sf::Transformable* Button::getTransformable()
+{
+	if(sprite)
+		return sprite;
+	else if (rectShape)
+		return rectShape;
+	else return NULL;
+}

@@ -122,14 +122,15 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 		scrollbox.addElement(&triggeredTexts.back());
 	}
 
-	for(int i = 0; i < 4; ++i)
-		scrollbox.addElement(&breakTexts[i]);
-
 	for (int i = 0; i < 4; ++i)
 	{
 		buttons[i] = new Button(buttonTexture);
 		buttons[i]->setPosition(breakTexts[i].getPosition());
 		buttons[i]->move(sf::Vector2f(500, 0));
+
+
+		scrollbox.addElement(&breakTexts[i]);
+		scrollbox.addElement(buttons[i]->getTransformable());
 	}
 }
 	

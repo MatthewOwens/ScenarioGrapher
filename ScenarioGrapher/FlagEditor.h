@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 #include <SFML/Graphics/Text.hpp>
+#include <list>
 
 #include "Button.h"
 
@@ -33,10 +34,10 @@ private:
 	std::map<std::string, int> &localFlags;
 	std::map<std::string, int> &globalFlags;
 
-	std::vector<sf::Text> requiredTexts;
-	std::vector<sf::Text> triggeredTexts;
-	std::vector<sf::Text> localTexts;
-	std::vector<sf::Text> globalTexts;
+	std::list<sf::Text> requiredTexts;
+	std::list<sf::Text> triggeredTexts;
+	std::list<sf::Text> localTexts;
+	std::list<sf::Text> globalTexts;
 
 	ScrollableRegion scrollbox;
 
@@ -49,15 +50,15 @@ private:
 	sf::RectangleShape rect;
 
 	void moveTextBlock(TextBlocks block, float moveVal);
-	void addText(std::vector<sf::Text>& vec);
+	void addText(std::list<sf::Text>& list);
 
-	void increment(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
+	void increment(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
 				std::map<std::string, int>& map, bool set = true);
 
-	void decrement(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
+	void decrement(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
 				std::map<std::string, int>& map, bool set = true);
 
-	void remove(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
+	void remove(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
 				std::map<std::string, int>& map);
 };
 #endif//FLAGEDITOR_H

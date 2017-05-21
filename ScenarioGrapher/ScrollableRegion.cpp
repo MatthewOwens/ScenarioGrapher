@@ -38,7 +38,6 @@ void ScrollableRegion::addElement(sf::Text *x)
 }
 void ScrollableRegion::setAnchor(sf::Text* anchor)
 {
-	std::cout << "anchor set to '" << anchor->getString().toAnsiString() << "'" << std::endl;
 	this->anchor = anchor;
 
 	//if(scrollCheck(anchor))

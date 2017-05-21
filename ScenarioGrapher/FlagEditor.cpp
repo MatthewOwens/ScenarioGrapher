@@ -37,15 +37,17 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 
 	for (auto i : localFlags)
 	{
-		localTexts.push_back(sf::Text(i.first, font, charSize));
+		localTexts.emplace_back(sf::Text(i.first, font, charSize));
 		localTexts.back().setPosition(textSpawn);
+		scrollbox.addElement(&localTexts.back());
 
 		textHeight = localTexts.back().getGlobalBounds().height;
 		textLength = localTexts.back().getGlobalBounds().width;
 
-		localTexts.push_back(sf::Text(std::to_string(i.second), font, charSize));
+		localTexts.emplace_back(sf::Text(std::to_string(i.second), font, charSize));
 		localTexts.back().setPosition(textSpawn + padding);
 		localTexts.back().move(textLength, 0);
+		scrollbox.addElement(&localTexts.back());
 
 
 		// Moving the spawn
@@ -60,14 +62,16 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 
 	for (auto i : globalFlags)
 	{
-		globalTexts.push_back(sf::Text(i.first, font, charSize));
+		globalTexts.emplace_back(sf::Text(i.first, font, charSize));
 		globalTexts.back().setPosition(textSpawn);
+		scrollbox.addElement(&globalTexts.back());
 
 		textLength = globalTexts.back().getGlobalBounds().width;
-		globalTexts.push_back(sf::Text(std::to_string(i.second), font, charSize));
+		globalTexts.emplace_back(sf::Text(std::to_string(i.second), font, charSize));
 
 		globalTexts.back().setPosition(textSpawn + padding);
 		globalTexts.back().move(textLength, 0);
+		scrollbox.addElement(&globalTexts.back());
 
 		textSpawn.y += padding.x + textHeight;
 	}
@@ -80,14 +84,16 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 
 	for (auto i : conn.getFlags())
 	{
-		requiredTexts.push_back(sf::Text(i.first, font, charSize));
+		requiredTexts.emplace_back(sf::Text(i.first, font, charSize));
 		requiredTexts.back().setPosition(textSpawn);
+		scrollbox.addElement(&requiredTexts.back());
 
 		textLength = requiredTexts.back().getGlobalBounds().width;
-		requiredTexts.push_back(sf::Text(std::to_string(i.second), font, charSize));
+		requiredTexts.emplace_back(sf::Text(std::to_string(i.second), font, charSize));
 
 		requiredTexts.back().setPosition(textSpawn + padding);
 		requiredTexts.back().move(textLength, 0);
+		scrollbox.addElement(&requiredTexts.back());
 
 		textSpawn.y += padding.x + textHeight;
 	}
@@ -99,12 +105,13 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 
 	for (auto i : conn.getTriggers())
 	{
-		triggeredTexts.push_back(sf::Text(i.first, font, charSize));
+		triggeredTexts.emplace_back(sf::Text(i.first, font, charSize));
 		triggeredTexts.back().setPosition(textSpawn);
 
 		textLength = triggeredTexts.back().getGlobalBounds().width;
-		triggeredTexts.push_back(sf::Text(std::to_string(i.second), font, charSize));
+		scrollbox.addElement(&triggeredTexts.back());
 
+		triggeredTexts.emplace_back(sf::Text(std::to_string(i.second), font, charSize));
 		triggeredTexts.back().setPosition(textSpawn + padding);
 		triggeredTexts.back().move(textLength, 0);
 
@@ -112,6 +119,7 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 
 		// Updating the scrollbox anchor
 		scrollbox.setAnchor(&triggeredTexts.back());
+		scrollbox.addElement(&triggeredTexts.back());
 	}
 
 	for(int i = 0; i < 4; ++i)
@@ -188,25 +196,27 @@ void FlagEditor::removeFlags(const sf::Vector2f& mousePos)
 	remove(mousePos, localTexts, localFlags);
 }
 
-void FlagEditor::decrement(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
+void FlagEditor::decrement(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
 						std::map<std::string, int>& map, bool set)
 {
 	if (map.size() == 0)
 		return;
 
 	auto mapItr = map.begin();
-	int vecItr = 0;
+	auto itr = list.begin();
+	int listItr = 0;
 	bool found = false;
 
-	for (; vecItr < vec.size(); ++vecItr)
+	//for (; listItr < list.size(); ++listItr)
+	for(; itr != list.end(); ++itr)
 	{
-		if (vec[vecItr].getGlobalBounds().contains(mousePos))
+		if (itr->getGlobalBounds().contains(mousePos))
 		{
 			found = true;
 			break;
 		}
 
-		if (vecItr % 2 == 0 && vecItr != 0)
+		if (listItr % 2 == 0 && listItr != 0)
 			mapItr++;
 	}
 
@@ -215,88 +225,92 @@ void FlagEditor::decrement(const sf::Vector2f& mousePos, std::vector<sf::Text>& 
 		// Decrementing the flag
 		mapItr->second--;
 
-		if (vecItr % 2 == 0)
-			vecItr++;
+		if (listItr % 2 == 0)
+			listItr++;
 
 		// Updating the string
 		if(set)
-			vec[vecItr].setString(std::to_string(mapItr->second));
+			itr->setString(std::to_string(mapItr->second));
 		else
 		{
 			std::string sign = "";
 			if (mapItr->second > 0)
 				sign = "+";
 
-			vec[vecItr].setString(sign + std::to_string(mapItr->second));
+			itr->setString(sign + std::to_string(mapItr->second));
 		}
 	}
 }
 
-void FlagEditor::remove(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
+void FlagEditor::remove(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
 						std::map<std::string, int>& map)
 {
-	int vecSel = -1;
+	int listSel = -1;
 	auto mapItr = map.begin();
+	auto itr = list.begin();
 
-	for (int i = 0; i < vec.size(); ++i)
+	//for (int i = 0; i < list.size(); ++i)
 	{
-		if (vec[i].getGlobalBounds().contains(mousePos))
+		listSel++;
+		if (itr->getGlobalBounds().contains(mousePos))
 		{
-			vecSel = i;
-
-			if (i % 2 == 1)	// Clicked on the value of the flag
-				vecSel--;
+			if (listSel % 2 == 1)	// Clicked on the value of the flag
+				listSel--;
 
 		}
 
-		if (i % 2 == 0 && i != 0)
+		if (listSel % 2 == 0 && listSel != 0)
 			mapItr++;
 
 	}
 
 	// If there was a match
-	if (vecSel != -1)
+	if (itr != list.end())
 	{
 		map.erase(mapItr);
-		vec.erase(vec.begin() + vecSel, vec.begin() + vecSel + 2);
+		auto range_end = itr;
+		std::advance(range_end, 2);
+		list.erase(itr, range_end);
+		//list.erase(list.begin() + listSel, list.begin() + listSel + 2);
 	}
 }
 
-void FlagEditor::increment(const sf::Vector2f& mousePos, std::vector<sf::Text>& vec,
+void FlagEditor::increment(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
 						std::map<std::string, int>& map, bool set)
 {
-	int vecSel = -1;
+	int listSel = -1;
+	auto itr = list.begin();
 	auto mapItr = map.begin();
 
-	for (int i = 0; i < vec.size(); ++i)
+	//for (int i = 0; i < list.size(); ++i)
+	for(; itr != list.end(); ++itr)
 	{
-		if (vec[i].getGlobalBounds().contains(mousePos))
+		listSel++;
+		if (itr->getGlobalBounds().contains(mousePos))
 		{
-			vecSel = i;
-
-			if (i % 2 == 0)	// Clicked on the name of the flag
-				vecSel = i + 1;
+			if (listSel % 2 == 0)	// Clicked on the name of the flag
+				listSel++;
 
 			break;
 		}
 
-		if (i % 2 == 0 && i != 0)
+		if(listSel % 2 == 0 && listSel != 0)
 			mapItr++;
 	}
 
-	if (vecSel != -1)
+	if (itr != list.end())
 	{
 		mapItr->second++;
 
 		if(set)
-			vec[vecSel].setString(std::to_string(mapItr->second));
+			itr->setString(std::to_string(mapItr->second));
 		else
 		{
 			std::string sign = "";
 			if (mapItr->second > 0)
 				sign = "+";
 
-			vec[vecSel].setString(sign + std::to_string(mapItr->second));
+			itr->setString(sign + std::to_string(mapItr->second));
 		}
 	}
 }
@@ -372,42 +386,47 @@ void FlagEditor::inputString(std::string str)
 	inStrings[1] = "";
 }
 
-void FlagEditor::addText(std::vector<sf::Text>& vec)
+void FlagEditor::addText(std::list<sf::Text>& list)
 {
 	auto ref = breakTexts[clickedButton];
-	int count = vec.size();
+	int count = list.size();
 	int widthPadding = 20;
+	auto second_last = -- --list.end();
 
-	vec.push_back(sf::Text(inStrings[0], fnt, charSize));
+	list.push_back(sf::Text(inStrings[0], fnt, charSize));
 	if (count != 0)
 	{
-		vec.back().setPosition(vec[count - 2].getPosition());
-		vec.back().move(0, vec[count-2].getGlobalBounds().height + 20);
+		//list.back().setPosition(list[count - 2].getPosition());
+		list.back().setPosition(second_last->getPosition());
+		//list.back().move(0, list[count-2].getGlobalBounds().height + 20);
+		list.back().move(0, second_last->getGlobalBounds().height + 20);
 	}
 	else
 	{
-		vec.back().setPosition(ref.getPosition());
-		vec.back().move(10, ref.getGlobalBounds().height + 20);
+		list.back().setPosition(ref.getPosition());
+		list.back().move(10, ref.getGlobalBounds().height + 20);
 	}
 
-	auto keyItr = vec.back();
+	auto keyItr = list.back();
 	sf::Vector2f keyTextSize(keyItr.getGlobalBounds().width, keyItr.getGlobalBounds().height);
 
-	vec.push_back(sf::Text(inStrings[1], fnt, charSize));
+	list.push_back(sf::Text(inStrings[1], fnt, charSize));
 	if (count != 0)
 	{
-		vec.back().setPosition(vec[count - 2].getPosition());
-		vec.back().move(0 + widthPadding + keyTextSize.x, vec[count-2].getGlobalBounds().height + 20);
+		//list.back().setPosition(list[count - 2].getPosition());
+		list.back().setPosition(second_last->getPosition());
+		//list.back().move(0 + widthPadding + keyTextSize.x, list[count-2].getGlobalBounds().height + 20);
+		list.back().move(0+ widthPadding + keyTextSize.x, second_last->getGlobalBounds().height + 20);
 	}
 	else
 	{
-		vec.back().setPosition(ref.getPosition());
-		vec.back().move(10 + widthPadding + keyTextSize.x, ref.getGlobalBounds().height + 20);
+		list.back().setPosition(ref.getPosition());
+		list.back().move(10 + widthPadding + keyTextSize.x, ref.getGlobalBounds().height + 20);
 	}
 
 	// Adding the text to our scrollbox
-	scrollbox.addElement(&vec.back());
-	scrollbox.addElement(&vec.back() - 1);
+	scrollbox.addElement(&list.back());
+	scrollbox.addElement(&list.back() - 1);
 }
 
 void FlagEditor::render(sf::RenderWindow& window)

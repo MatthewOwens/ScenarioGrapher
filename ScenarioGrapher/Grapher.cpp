@@ -393,7 +393,8 @@ void Grapher::onTextEntered(int unicode)
 							 lFlags.clear();
 							 gFlags.clear();
 
-							 if (populateGraph(fileManager.loadDialogue(ibox.getString(), newName)) == 0)
+							 //if (populateGraph(fileManager.loadDialogue(ibox.getString(), newName)) == 0)
+							 if (populateGraph(fileManager.loadDialogue("2calm", newName)) == 0)
 							 {
 								 moduleName.setString(newName);
 								 lFlags = fileManager.loadLocals(newName);

@@ -220,7 +220,7 @@ void FlagEditor::decrement(const sf::Vector2f& mousePos, std::list<sf::Text>& li
 
 	auto mapItr = map.begin();
 	auto itr = list.begin();
-	int listItr = 0;
+	int listItr = -1;
 	bool found = false;
 
 	//for (; listItr < list.size(); ++listItr)
@@ -233,7 +233,10 @@ void FlagEditor::decrement(const sf::Vector2f& mousePos, std::list<sf::Text>& li
 		}
 
 		if (listItr % 2 == 0 && listItr != 0)
+		{
 			mapItr++;
+			listItr++;
+		}
 	}
 
 	if (found)
@@ -242,19 +245,23 @@ void FlagEditor::decrement(const sf::Vector2f& mousePos, std::list<sf::Text>& li
 		mapItr->second--;
 
 		if (listItr % 2 == 0)
+		{
+			itr++;
 			listItr++;
+		}
 
 		// Updating the string
-		if(set)
-			itr->setString(std::to_string(mapItr->second));
-		else
-		{
-			std::string sign = "";
-			if (mapItr->second > 0)
-				sign = "+";
+		itr->setString(std::to_string(mapItr->second));
+		//if(set)
+		//	itr->setString(std::to_string(mapItr->second));
+		//else
+		//{
+		//	std::string sign = "";
+		//	if (mapItr->second > 0)
+		//		sign = "+";
 
-			itr->setString(sign + std::to_string(mapItr->second));
-		}
+		//	itr->setString(sign + std::to_string(mapItr->second));
+		//}
 	}
 }
 
@@ -321,16 +328,17 @@ void FlagEditor::increment(const sf::Vector2f& mousePos, std::list<sf::Text>& li
 	{
 		mapItr->second++;
 
-		if(set)
-			itr->setString(std::to_string(mapItr->second));
-		else
-		{
-			std::string sign = "";
-			if (mapItr->second > 0)
-				sign = "+";
+		//if(set)
+		//	itr->setString(std::to_string(mapItr->second));
+		//else
+		//{
+		//	std::string sign = "";
+		//	if (mapItr->second > 0)
+		//		sign = "+";
 
-			itr->setString(sign + std::to_string(mapItr->second));
-		}
+		//	itr->setString(sign + std::to_string(mapItr->second));
+		//}
+		itr->setString(std::to_string(mapItr->second));
 	}
 }
 

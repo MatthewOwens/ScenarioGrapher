@@ -65,5 +65,7 @@ private:
 
 	void remove(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
 				std::map<std::string, int>& map);
+
+	void removeShared(const sf::Vector2f& mousePos);
 };
 #endif//FLAGEDITOR_H

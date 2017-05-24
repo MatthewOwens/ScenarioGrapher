@@ -28,7 +28,7 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 	breakTexts[REQUIRED] = sf::Text("Required Flags:", font, charSize);
 	breakTexts[TRIGGERED] = sf::Text("Triggered Flags:", font, charSize);
 
-	scrollbox = ScrollableRegion(30,30,920,160,NULL);
+	scrollbox = ScrollableRegion(30,30,920,660,NULL,&breakTexts[LOCAL]);
 	scrollbox.setAnchor(&breakTexts[TRIGGERED]);
 
 	inStrings[0] = "";
@@ -209,7 +209,69 @@ void FlagEditor::removeFlags(const sf::Vector2f& mousePos)
 	remove(mousePos, requiredTexts, conn.getFlags());
 	remove(mousePos, triggeredTexts, conn.getTriggers());
 	//remove(mousePos, sharedTexts, sharedFlags);
+	removeShared(mousePos);
 	remove(mousePos, localTexts, localFlags);
+}
+
+void FlagEditor::removeShared(const sf::Vector2f& mousePos)
+{
+	bool removeRequired = false;
+	auto itr = sharedHeaders.begin();
+	std::string toRemove = "";
+
+	// Checking if we need to actually remove a flag
+	for(;itr != sharedHeaders.end(); ++itr)
+	{
+		if(itr->getGlobalBounds().contains(mousePos))
+		{
+			removeRequired = true;
+			toRemove = itr->getString().toAnsiString();
+			break;
+		}
+	}
+
+	if(removeRequired)
+	{
+		// How far the rest of the text values are going to move back
+		float moveVal = itr->getGlobalBounds().height + 20;
+		bool bail = false;
+		sharedHeaders.erase(itr);
+
+		for(auto i : sharedFlags[toRemove])
+		{
+			for(auto j = sharedTexts.begin(); j != sharedTexts.end(); ++j)
+			{
+				// Checking the flag name
+				if(i.first == j->getString().toAnsiString())
+				{
+					auto k = j;
+					k++;
+
+					// Flag name matched, check the flag value
+					if(std::to_string(i.second) == k->getString().toAnsiString())
+					{
+						moveVal += j->getGlobalBounds().height + 20;
+
+						// Removing the elements from the scrollbox
+						scrollbox.removeElement(&(*k));
+						scrollbox.removeElement(&(*j));
+
+						// Removing the elements from our list
+						sharedTexts.erase(k);
+						sharedTexts.erase(j);
+						bail = true;
+						break;
+					}
+				}
+			}
+		}
+
+		// Removing the map from our shared flags
+		sharedFlags.erase(toRemove);
+
+		// TODO: Move the other text back
+		moveVal *= -1;
+	}
 }
 
 void FlagEditor::decrement(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
@@ -346,9 +408,23 @@ void FlagEditor::inputString(std::string str)
 {
 	if((TextBlocks)clickedButton == GLOBAL)
 	{
-		addSharedText(str);
-		inStrings[0] = "";
-		inStrings[1] = "";
+		bool match = false;
+
+		for(auto i : sharedHeaders)
+		{
+			if(i.getString().toAnsiString() == str)
+			{
+				match = true;
+				break;
+			}
+		}
+
+		if(!match)
+		{
+			addSharedText(str);
+			inStrings[0] = "";
+			inStrings[1] = "";
+		}
 		return;
 	}
 
@@ -505,7 +581,6 @@ void FlagEditor::addSharedText(const std::string& str)
 void FlagEditor::render(sf::RenderWindow& window)
 {
 	window.draw(rect);
-	window.draw(scrollbox.getVisBounds());
 
 	for (auto i : localTexts)
 		window.draw(i);

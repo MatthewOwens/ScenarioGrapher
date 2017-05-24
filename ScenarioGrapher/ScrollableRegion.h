@@ -15,10 +15,11 @@ class ScrollableRegion
 {
 	public:
 		ScrollableRegion();
-		ScrollableRegion(float left, float top, float width, float height, sf::Transformable* anchor);
+		ScrollableRegion(float left, float top, float width, float height, sf::Transformable* anchor, sf::Transformable* topAnchor);
 		~ScrollableRegion();
-		sf::RectangleShape& getVisBounds() { return visBounds; }
+		//sf::RectangleShape& getVisBounds() { return visBounds; }
 		void addElement(sf::Transformable *x);
+		void removeElement(sf::Transformable *x);
 		void setAnchor(sf::Transformable* anchor);
 
 		void resizeBounds(sf::Transformable *x = NULL);
@@ -29,6 +30,7 @@ class ScrollableRegion
 
 		std::vector<sf::Transformable*> elements;
 		sf::Transformable* anchor;				// Anchor who's position we'll be checking against
+		sf::Transformable* topAnchor;
 
 		bool scrollCheck(sf::Transformable *anchor);
 };

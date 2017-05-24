@@ -265,7 +265,7 @@ void FlagEditor::remove(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
 	auto mapItr = map.begin();
 	auto itr = list.begin();
 
-	//for (int i = 0; i < list.size(); ++i)
+	for (int i = 0; i < list.size(); ++i)
 	{
 		listSel++;
 		if (itr->getGlobalBounds().contains(mousePos))

@@ -4,8 +4,8 @@
 #include "Connector.h"
 
 FileManager::FileManager(const std::string& dialogueFolderPath)
-:dialogueFolder(dialogueFolderPath),
-globalFlagPath(dialogueFolderPath + "globals.json")
+:dialogueFolder(dialogueFolderPath)
+//globalFlagPath(dialogueFolderPath + "globals.json")
 {
 }
 
@@ -50,10 +50,36 @@ std::map<std::string, int> FileManager::loadLocals(const std::string& moduleName
 	return loadFlags(dialogueFolder + moduleName + "/flags.json");
 }
 
-std::map<std::string, int> FileManager::loadGlobals()
+//std::map<std::string, int> FileManager::loadGlobals()
+//{
+//	//return loadFlags(dialogueFolder + "globals.json");
+//	return loadFlags(globalFlagPath);
+//}
+
+std::map< std::string, std::map<std::string, int> > FileManager::loadShared(const std::string& moduleFile)
 {
-	//return loadFlags(dialogueFolder + "globals.json");
-	return loadFlags(globalFlagPath);
+	std::ifstream ifs(dialogueFolder + moduleFile + "/dialogue.json");
+	Json::Reader reader;
+	Json::Value obj;
+
+	//std::vector<std::string> friends;
+	std::map< std::string, std::map<std::string, int>> ret;
+
+	if(ifs.good())
+	{
+		reader.parse(ifs, obj);
+		const Json::Value& friendlyModules = obj["friendlyModules"];
+		std::string friendly;
+		std::map<std::string, int> flags;
+
+		for(int i = 0; i < friendlyModules.size(); ++i)
+		{
+			std::cout << "parsing flags from " << friendlyModules[i] << std::endl;
+			ret.insert(std::make_pair( friendlyModules[i].asString(),
+					loadFlags(dialogueFolder + friendlyModules[i].asString() + "/flags.json")));
+		}
+	}
+	return ret;
 }
 
 void FileManager::saveLocals(const std::string& moduleName, const std::map<std::string, int>& map)
@@ -61,11 +87,17 @@ void FileManager::saveLocals(const std::string& moduleName, const std::map<std::
 	saveFlags(dialogueFolder + moduleName + "/flags.json", map);
 }
 
-void FileManager::saveGlobals(const std::map<std::string, int>& map)
+void FileManager::saveShared(const std::map < std::string, std::map<std::string,int> >&map)
 {
-	//saveFlags(dialogueFolder + "globals.json", map);
-	saveFlags(globalFlagPath, map);
+	for(auto itr = map.begin(); itr != map.end(); ++itr)
+		saveFlags(dialogueFolder + itr->first + "/flags.json", itr->second);
 }
+
+//void FileManager::saveGlobals(const std::map<std::string, int>& map)
+//{
+//	//saveFlags(dialogueFolder + "globals.json", map);
+//	saveFlags(globalFlagPath, map);
+//}
 
 std::vector<Node*> FileManager::loadDialogue(const std::string& moduleFile)
 {

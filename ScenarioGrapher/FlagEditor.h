@@ -3,6 +3,7 @@
 #include "InputBox.h"
 #include "Connector.h"
 #include "ScrollableRegion.h"
+#include "FileManager.h"
 #include <map>
 #include <string>
 #include <SFML/Graphics/Text.hpp>
@@ -14,8 +15,9 @@ class FlagEditor
 {
 public:
 	FlagEditor(Connector& conn, std::map<std::string, int>& localFlags,
-		std::map<std::string, int>& globalFlags, sf::Vector2f availableSize,
-		const sf::Font& font, const sf::Texture& buttonTexture);
+		std::map<std::string, std::map<std::string,int>>& sharedFlags,
+		sf::Vector2f availableSize, const sf::Font& font,
+		const sf::Texture& buttonTexture, FileManager& fmgr);
 
 	~FlagEditor();
 	void render(sf::RenderWindow& window);
@@ -32,14 +34,16 @@ private:
 	Connector& conn;	// The connection who's flags we're going to be editing
 	const sf::Font& fnt;
 	std::map<std::string, int> &localFlags;
-	std::map<std::string, int> &globalFlags;
+	std::map<std::string, std::map<std::string,int>> &sharedFlags;
 
 	std::list<sf::Text> requiredTexts;
 	std::list<sf::Text> triggeredTexts;
 	std::list<sf::Text> localTexts;
-	std::list<sf::Text> globalTexts;
+	std::list<sf::Text> sharedHeaders;
+	std::list<sf::Text> sharedTexts;
 
 	ScrollableRegion scrollbox;
+	FileManager& fm;
 
 	sf::Text breakTexts[4];
 	Button* buttons[4];
@@ -51,6 +55,7 @@ private:
 
 	void moveTextBlock(TextBlocks block, float moveVal);
 	void addText(std::list<sf::Text>& list);
+	void addSharedText(const std::string& str);
 
 	void increment(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
 				std::map<std::string, int>& map, bool set = true);

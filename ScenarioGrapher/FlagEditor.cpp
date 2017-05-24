@@ -3,27 +3,28 @@
 #include <locale>
 
 FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
-	std::map<std::string, int>& global, sf::Vector2f availableSize,
-	const sf::Font& font, const sf::Texture& buttonTexture)
-	:conn(connection),
+	std::map<std::string, std::map<std::string, int>>& shared,
+	sf::Vector2f availableSize, const sf::Font& font,
+	const sf::Texture& buttonTexture, FileManager& fmgr)
+	:
+	conn(connection),
 	localFlags(local),
-	globalFlags(global),
+	sharedFlags(shared),
 	rect(sf::RectangleShape(availableSize)),
-	fnt(font)
-	//scrollbox(30,30,920,660,NULL)
+	fnt(font),
+	fm(fmgr)
 {
 	sf::Vector2f textSpawn = sf::Vector2f(50, 50);
 	sf::Vector2f padding = sf::Vector2f(20, 0);
 
 	rect.setPosition(0, 0);
 	rect.setFillColor(sf::Color(29,29,29));
-	//rect.setFillColor(sf::Color::Blue);
 	float textHeight = 0.f;
 	float textLength = 0.f;
 	clickedButton = -1;
 
 	breakTexts[LOCAL] = sf::Text("Initial Local Flags:", font, charSize);
-	breakTexts[GLOBAL] = sf::Text("Initial Global Flags:", font, charSize);
+	breakTexts[GLOBAL] = sf::Text("Initial Shared Flags:", font, charSize);
 	breakTexts[REQUIRED] = sf::Text("Required Flags:", font, charSize);
 	breakTexts[TRIGGERED] = sf::Text("Triggered Flags:", font, charSize);
 
@@ -60,20 +61,32 @@ FlagEditor::FlagEditor(Connector& connection, std::map<std::string, int>& local,
 	textHeight = breakTexts[1].getGlobalBounds().height;
 	textSpawn.y += padding.x + textHeight;
 
-	for (auto i : globalFlags)
+	for (auto i : sharedFlags)
 	{
-		globalTexts.emplace_back(sf::Text(i.first, font, charSize));
-		globalTexts.back().setPosition(textSpawn);
-		scrollbox.addElement(&globalTexts.back());
-
-		textLength = globalTexts.back().getGlobalBounds().width;
-		globalTexts.emplace_back(sf::Text(std::to_string(i.second), font, charSize));
-
-		globalTexts.back().setPosition(textSpawn + padding);
-		globalTexts.back().move(textLength, 0);
-		scrollbox.addElement(&globalTexts.back());
+		sharedHeaders.emplace_back(sf::Text(i.first, font, charSize));
+		sharedHeaders.back().setPosition(textSpawn);
+		sharedHeaders.back().setFillColor(sf::Color(242,223,177));
+		scrollbox.addElement(&sharedHeaders.back());
 
 		textSpawn.y += padding.x + textHeight;
+		//globalTexts.emplace_back(sf::Text(std::to_string(i.second), font, charSize));
+
+		for (auto j : i.second)
+		{
+			sharedTexts.emplace_back(sf::Text(j.first, font, charSize));
+			sharedTexts.back().setPosition(textSpawn);
+			scrollbox.addElement(&sharedTexts.back());
+
+			textLength = sharedTexts.back().getGlobalBounds().width;
+			//textSpawn.y += padding.x + textHeight;
+
+			sharedTexts.emplace_back(sf::Text(std::to_string(j.second), font, charSize));
+			sharedTexts.back().setPosition(textSpawn + padding);
+			sharedTexts.back().move(textLength, 0);
+			scrollbox.addElement(&sharedTexts.back());
+
+			textSpawn.y += padding.x + textHeight;
+		}
 	}
 
 	textSpawn.y += padding.x * 2;
@@ -145,7 +158,9 @@ void FlagEditor::moveTextBlock(TextBlocks block, float moveVal)
 			buttons[LOCAL]->move(0, moveVal);
 		case GLOBAL:
 			breakTexts[GLOBAL].move(0, moveVal);
-			for (auto &i : globalTexts)
+			for (auto &i : sharedTexts)
+				i.move(0, moveVal);
+			for (auto &i : sharedHeaders)
 				i.move(0, moveVal);
 			buttons[GLOBAL]->move(0, moveVal);
 		case REQUIRED:
@@ -193,7 +208,7 @@ void FlagEditor::removeFlags(const sf::Vector2f& mousePos)
 {
 	remove(mousePos, requiredTexts, conn.getFlags());
 	remove(mousePos, triggeredTexts, conn.getTriggers());
-	remove(mousePos, globalTexts, globalFlags);
+	//remove(mousePos, sharedTexts, sharedFlags);
 	remove(mousePos, localTexts, localFlags);
 }
 
@@ -318,6 +333,14 @@ void FlagEditor::increment(const sf::Vector2f& mousePos, std::list<sf::Text>& li
 
 void FlagEditor::inputString(std::string str)
 {
+	if((TextBlocks)clickedButton == GLOBAL)
+	{
+		addSharedText(str);
+		inStrings[0] = "";
+		inStrings[1] = "";
+		return;
+	}
+
 	int flagVal;
 
 	if (inStrings[0] == "")
@@ -328,25 +351,6 @@ void FlagEditor::inputString(std::string str)
 	else
 	{
 		inStrings[1] = str;
-		/*std::transform(str.begin(), str.end(), str.begin(), ::tolower);
-
-		if (str == "false")
-		{
-			inStrings[1] = str;
-			flagVal = false;
-		}
-		else if (str == "true")
-		{
-			inStrings[1] = str;
-			flagVal = true;
-		}
-		else
-		{
-			inStrings[0] = "";
-			inStrings[1] = "";
-			return;
-		}*/
-
 		try
 		{
 			flagVal = std::stoi(inStrings[1]);
@@ -371,9 +375,9 @@ void FlagEditor::inputString(std::string str)
 		scrollbox.setAnchor(&triggeredTexts.back());
 		conn.addTrigger(inStrings[0], flagVal);
 		break;
-	case GLOBAL:
-		addText(globalTexts);
-		globalFlags[inStrings[0]] = flagVal;
+	//case GLOBAL:
+		//addText(globalTexts);
+		//globalFlags[inStrings[0]] = flagVal;
 		break;
 	case LOCAL:
 		addText(localTexts);
@@ -397,9 +401,7 @@ void FlagEditor::addText(std::list<sf::Text>& list)
 	list.push_back(sf::Text(inStrings[0], fnt, charSize));
 	if (count != 0)
 	{
-		//list.back().setPosition(list[count - 2].getPosition());
 		list.back().setPosition(second_last->getPosition());
-		//list.back().move(0, list[count-2].getGlobalBounds().height + 20);
 		list.back().move(0, second_last->getGlobalBounds().height + 20);
 	}
 	else
@@ -414,9 +416,7 @@ void FlagEditor::addText(std::list<sf::Text>& list)
 	list.push_back(sf::Text(inStrings[1], fnt, charSize));
 	if (count != 0)
 	{
-		//list.back().setPosition(list[count - 2].getPosition());
 		list.back().setPosition(second_last->getPosition());
-		//list.back().move(0 + widthPadding + keyTextSize.x, list[count-2].getGlobalBounds().height + 20);
 		list.back().move(0+ widthPadding + keyTextSize.x, second_last->getGlobalBounds().height + 20);
 	}
 	else
@@ -430,6 +430,57 @@ void FlagEditor::addText(std::list<sf::Text>& list)
 	scrollbox.addElement(&list.back() - 1);
 }
 
+void FlagEditor::addSharedText(const std::string& str)
+{
+	auto ref = breakTexts[clickedButton];
+	auto st_last = --sharedTexts.end();
+	int widthPadding = 20;
+	bool usingRef = (sharedHeaders.size() == 0 ? false : true);
+
+	std::map<std::string, int> newShared;
+	newShared = fm.loadLocals(str);
+
+	if(newShared.empty())
+		return;
+
+	sharedFlags.insert(std::make_pair(str, newShared));
+
+	// Adding the header text for the shared flags block
+	sharedHeaders.emplace_back(sf::Text(str, fnt, charSize));
+	sharedHeaders.back().setFillColor(sf::Color(242,223,177));
+	scrollbox.addElement(&sharedHeaders.back());
+
+	if(usingRef)
+	{
+		sharedHeaders.back().setPosition(ref.getPosition());
+		sharedHeaders.back().move(10, ref.getGlobalBounds().height + 20);
+	}
+	else
+	{
+		sharedHeaders.back().setPosition(st_last->getPosition());
+		sharedHeaders.back().move(10, st_last->getGlobalBounds().height + 20);
+	}
+
+	// Moving the header
+	ref = sharedHeaders.back();
+
+	for(auto i : newShared)
+	{
+		// Flag Text
+		sharedTexts.emplace_back(sf::Text(i.first, fnt, charSize));
+		sharedTexts.back().setPosition(ref.getPosition());
+		sharedTexts.back().move(10, ref.getGlobalBounds().height + 20);
+		scrollbox.addElement(&sharedTexts.back());
+
+		// Flag Value
+		sf::Vector2f keyTextSize(ref.getGlobalBounds().width, ref.getGlobalBounds().height);
+		sharedTexts.emplace_back(sf::Text(std::to_string(i.second), fnt, charSize));
+		sharedTexts.back().setPosition(ref.getPosition());
+		sharedTexts.back().move(10 + widthPadding + keyTextSize.x, ref.getGlobalBounds().height + 20);
+		scrollbox.addElement(&sharedTexts.back());
+	}
+}
+
 void FlagEditor::render(sf::RenderWindow& window)
 {
 	window.draw(rect);
@@ -438,7 +489,10 @@ void FlagEditor::render(sf::RenderWindow& window)
 	for (auto i : localTexts)
 		window.draw(i);
 
-	for (auto i : globalTexts)
+	for (auto i : sharedTexts)
+		window.draw(i);
+
+	for (auto i : sharedHeaders)
 		window.draw(i);
 
 	for (auto i : requiredTexts)

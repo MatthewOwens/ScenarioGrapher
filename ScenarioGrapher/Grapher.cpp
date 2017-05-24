@@ -391,16 +391,14 @@ void Grapher::onTextEntered(int unicode)
 						{
 							 std::string newName;
 							 lFlags.clear();
-							 gFlags.clear();
+							 sFlags.clear();
 
 							 //if (populateGraph(fileManager.loadDialogue(ibox.getString(), newName)) == 0)
 							 if (populateGraph(fileManager.loadDialogue("2calm", newName)) == 0)
 							 {
 								 moduleName.setString(newName);
 								 lFlags = fileManager.loadLocals(newName);
-
-								 if (gFlags.size() == 0)
-									 gFlags = fileManager.loadGlobals();
+								 sFlags = fileManager.loadShared(newName);
 							 }
 							 else
 								 std::cerr << "file " << ibox.getString() << " contained no nodes!" << std::endl;
@@ -550,7 +548,7 @@ void Grapher::onLeftClick(sf::Vector2f& viewPos)
 				sf::Vector2f size(window.getSize().x - graphBG.getSize().x, window.getSize().y);
 
 				flagEdit = new FlagEditor(selectedNode->getNode()->getConnections()[sel],
-				lFlags, gFlags, size, font, imageManager.getTexture("plus"));
+				lFlags, sFlags, size, font, imageManager.getTexture("plus"), fileManager);
 			}
 		}
 
@@ -660,9 +658,7 @@ void Grapher::onLeftClick(sf::Vector2f& viewPos)
 
 				fileManager.saveDialogue(moduleName.getString(), nodes);
 				fileManager.saveLocals(moduleName.getString(), lFlags);
-
-				if (moduleName.getString() != "untitled")
-					fileManager.saveGlobals(gFlags);
+				fileManager.saveShared(sFlags);
 			}
 
 			if (i.first == "n.names")

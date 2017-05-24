@@ -68,7 +68,8 @@ class Grapher
 		bool showNodeNames;
 
 		std::map<std::string, int> lFlags;
-		std::map<std::string, int> gFlags;
+		std::map < std::string, std::map<std::string, int> > sFlags;
+		//std::map<std::string, int> gFlags;
 
 		NodeView* selectedNode;
 		NodeView* clickedNode;

@@ -433,9 +433,10 @@ void FlagEditor::addText(std::list<sf::Text>& list)
 void FlagEditor::addSharedText(const std::string& str)
 {
 	auto ref = breakTexts[clickedButton];
-	auto st_last = --sharedTexts.end();
+	auto st_last = -- --sharedTexts.end();
 	int widthPadding = 20;
-	bool usingRef = (sharedHeaders.size() == 0 ? false : true);
+	bool usingRef = (sharedHeaders.size() == 0 ? true : false);
+	float moveVal = 0.f;
 
 	std::map<std::string, int> newShared;
 	newShared = fm.loadLocals(str);
@@ -448,17 +449,18 @@ void FlagEditor::addSharedText(const std::string& str)
 	// Adding the header text for the shared flags block
 	sharedHeaders.emplace_back(sf::Text(str, fnt, charSize));
 	sharedHeaders.back().setFillColor(sf::Color(242,223,177));
+	moveVal += sharedHeaders.back().getGlobalBounds().height + 20;
 	scrollbox.addElement(&sharedHeaders.back());
 
 	if(usingRef)
 	{
 		sharedHeaders.back().setPosition(ref.getPosition());
-		sharedHeaders.back().move(10, ref.getGlobalBounds().height + 20);
+		sharedHeaders.back().move(0, ref.getGlobalBounds().height + 20);
 	}
 	else
 	{
 		sharedHeaders.back().setPosition(st_last->getPosition());
-		sharedHeaders.back().move(10, st_last->getGlobalBounds().height + 20);
+		sharedHeaders.back().move(0, st_last->getGlobalBounds().height + 20);
 	}
 
 	// Moving the header
@@ -469,16 +471,24 @@ void FlagEditor::addSharedText(const std::string& str)
 		// Flag Text
 		sharedTexts.emplace_back(sf::Text(i.first, fnt, charSize));
 		sharedTexts.back().setPosition(ref.getPosition());
-		sharedTexts.back().move(10, ref.getGlobalBounds().height + 20);
+		sharedTexts.back().move(0, ref.getGlobalBounds().height + 20);
 		scrollbox.addElement(&sharedTexts.back());
 
+		moveVal += sharedTexts.back().getGlobalBounds().height + 20;
+
 		// Flag Value
-		sf::Vector2f keyTextSize(ref.getGlobalBounds().width, ref.getGlobalBounds().height);
+		sf::Vector2f keyTextSize(sharedTexts.back().getGlobalBounds().width,
+								sharedTexts.back().getGlobalBounds().height);
+
 		sharedTexts.emplace_back(sf::Text(std::to_string(i.second), fnt, charSize));
 		sharedTexts.back().setPosition(ref.getPosition());
-		sharedTexts.back().move(10 + widthPadding + keyTextSize.x, ref.getGlobalBounds().height + 20);
+		sharedTexts.back().move(widthPadding + keyTextSize.x, ref.getGlobalBounds().height + 20);
 		scrollbox.addElement(&sharedTexts.back());
+
+		ref = *(-- --sharedTexts.end());
 	}
+
+	moveTextBlock(REQUIRED, moveVal);
 }
 
 void FlagEditor::render(sf::RenderWindow& window)

@@ -305,7 +305,10 @@ void FlagEditor::increment(const sf::Vector2f& mousePos, std::list<sf::Text>& li
 		if (itr->getGlobalBounds().contains(mousePos))
 		{
 			if (listSel % 2 == 0)	// Clicked on the name of the flag
+			{
+				itr++;
 				listSel++;
+			}
 
 			break;
 		}

@@ -74,7 +74,6 @@ std::map< std::string, std::map<std::string, int> > FileManager::loadShared(cons
 
 		for(int i = 0; i < friendlyModules.size(); ++i)
 		{
-			std::cout << "parsing flags from " << friendlyModules[i] << std::endl;
 			ret.insert(std::make_pair( friendlyModules[i].asString(),
 					loadFlags(dialogueFolder + friendlyModules[i].asString() + "/flags.json")));
 		}

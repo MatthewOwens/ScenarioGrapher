@@ -259,6 +259,7 @@ void FlagEditor::removeShared(const sf::Vector2f& mousePos)
 						// Removing the elements from our list
 						sharedTexts.erase(k);
 						sharedTexts.erase(j);
+
 						bail = true;
 						break;
 					}
@@ -269,8 +270,8 @@ void FlagEditor::removeShared(const sf::Vector2f& mousePos)
 		// Removing the map from our shared flags
 		sharedFlags.erase(toRemove);
 
-		// TODO: Move the other text back
 		moveVal *= -1;
+		moveTextBlock(REQUIRED, moveVal);
 	}
 }
 
@@ -347,6 +348,7 @@ void FlagEditor::remove(const sf::Vector2f& mousePos, std::list<sf::Text>& list,
 		if (listSel % 2 == 0 && listSel != 0)
 			mapItr++;
 
+		itr++;
 	}
 
 	// If there was a match

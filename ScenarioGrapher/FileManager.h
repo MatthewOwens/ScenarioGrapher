@@ -20,7 +20,7 @@ public:
 	std::map<std::string, int> loadLocals(const std::string& moduleName);
 
 	//void saveGlobals(const std::map<std::string, int>& map);
-	void saveShared(const std::map< std::string, std::map<std::string, int> >& map);
+	void saveShared(const std::string& moduleName, const std::map< std::string, std::map<std::string, int> >& map);
 	void saveLocals(const std::string& moduleName, const std::map<std::string, int>& map);
 private:
 	std::map<std::string, int> loadFlags(const std::string& filePath);

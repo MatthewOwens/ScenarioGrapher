@@ -658,7 +658,7 @@ void Grapher::onLeftClick(sf::Vector2f& viewPos)
 
 				fileManager.saveDialogue(moduleName.getString(), nodes);
 				fileManager.saveLocals(moduleName.getString(), lFlags);
-				fileManager.saveShared(sFlags);
+				fileManager.saveShared(moduleName.getString(), sFlags);
 			}
 
 			if (i.first == "n.names")

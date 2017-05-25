@@ -86,17 +86,39 @@ void FileManager::saveLocals(const std::string& moduleName, const std::map<std::
 	saveFlags(dialogueFolder + moduleName + "/flags.json", map);
 }
 
-void FileManager::saveShared(const std::map < std::string, std::map<std::string,int> >&map)
+void FileManager::saveShared(const std::string& moduleName, const std::map < std::string, std::map<std::string,int> >&map)
 {
-	for(auto itr = map.begin(); itr != map.end(); ++itr)
-		saveFlags(dialogueFolder + itr->first + "/flags.json", itr->second);
-}
+	std::ifstream ifs(dialogueFolder + moduleName + "/dialogue.json");
 
-//void FileManager::saveGlobals(const std::map<std::string, int>& map)
-//{
-//	//saveFlags(dialogueFolder + "globals.json", map);
-//	saveFlags(globalFlagPath, map);
-//}
+	Json::StyledWriter writer;
+	Json::Reader reader;
+
+	Json::Value obj;
+	Json::Value arr(Json::arrayValue);
+
+	if(ifs.good())
+	{
+		reader.parse(ifs, obj);
+		ifs.close();
+	}
+	else
+	{
+		std::cerr << "Failed saving shared flags for " << moduleName << std::endl;
+		return;
+	}
+
+	// Writing our new array
+	for(auto itr = map.begin(); itr != map.end(); ++itr)
+	{
+		Json::Value jstr = itr->first;
+		arr.append(jstr);
+	}
+	obj["friendlyModules"] = arr;
+
+	// Saving to the file
+	std::ofstream ofs(dialogueFolder + moduleName + "/dialogue.json");
+	ofs << obj;
+}
 
 std::vector<Node*> FileManager::loadDialogue(const std::string& moduleFile)
 {

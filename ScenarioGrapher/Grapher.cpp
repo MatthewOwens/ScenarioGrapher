@@ -54,10 +54,10 @@ Grapher::Grapher() : fileManager("dialogue/")
 	buttons["n.node"] = new Button(sf::Vector2f(80,20), colors["button"],2);
 	buttons["n.node"]->setPosition(sf::Vector2f(window.getSize().x - 290, 100));
 
-	//buttons["n.names"] = new Button(sf::Vector2f(80, 20), colors["button"],2);
-	//buttons["n.names"]->setPosition(sf::Vector2f(window.getSize().x - 200, 100));
-	buttons["n.ndoe"] = new Button(sf::Vector2f(80, 20), colors["button"],2);
-	buttons["n.ndoe"]->setPosition(sf::Vector2f(window.getSize().x - 200, 100));
+	buttons["n.names"] = new Button(sf::Vector2f(80, 20), colors["button"],2);
+	buttons["n.names"]->setPosition(sf::Vector2f(window.getSize().x - 200, 100));
+	//buttons["n.ndoe"] = new Button(sf::Vector2f(80, 20), colors["button"],2);
+	//buttons["n.ndoe"]->setPosition(sf::Vector2f(window.getSize().x - 200, 100));
 
 	buttons["exit"] = new Button(sf::Vector2f(80, 20), colors["button"],2);
 	buttons["exit"]->setPosition(sf::Vector2f(window.getSize().x - 100, 50));
